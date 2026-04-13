@@ -15,11 +15,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     // 예약상태별 조회
     List<Reservation> findByStatus(Reservation.ReservationStatus status);
 
-    // 모든 예약과 룸 조회(최신순 정렬)
+    // 모든 예약과 룸 조회(최신순 정렬)===> JOIN FETCH r.room
+    // 이유: 일반 JOIN만 쓰면 예약 목록을 가져온 뒤 각 예약의 방 정보를 조회할 때마다 추가 쿼리가 발생하는 N+1 문제가 생기는데,
+    // FETCH JOIN으로 한 번에 가져오도록 설계하여 성능을 최적화하셨습니다.
     @Query(
             "SELECT r FROM Reservation r JOIN FETCH r.room ORDER BY r.createdAt DESC "
     )
-    List<Reservation> findAlWithRoom();
+    List<Reservation> findAllWithRoom();
 
     //하나아의 예약과 룸 조회
     @Query(
