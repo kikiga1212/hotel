@@ -2,11 +2,13 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    //grandle에서 npm을 실행할 수 있는 플러그인
+    id 'com.github.node-gradle.node' version '7.0.2'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-description = 'hotel'
+description = 'demo'
 
 java {
     toolchain {
@@ -33,7 +35,35 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testAnnotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.modelmapper:modelmapper:3.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
+
+// 프론트엔드 빌드(Node/Npm) (중복서버 사용시 필요)
+node {
+    // Node.js 버전(안정화버전)
+    version = '20.10.0'
+    npmVersion = '10.2.3'
+    download = true
+    // 프론트엔드가 설치된 위치
+    nodeProjectDir = file("${projectDir}/frondtend")
+}
+// npm install 실행시 옵션 지정(중복서버 사용시 필요)
+tasks.named('npmInstall'){
+    args = ['install']
+}
+// npm run build 실행시 gradle task 생성
+task npmBuild(type: NpmTask, dependsOn: npmInstall){
+    args = ['run', 'build']
+}
+// 프론트엔드 결과물을 static 에 복사
+// react의 결과물을 springboot 에 static 에 복사
+task copyFrontend(type:Copy, dependsOn: npmBuild){
+    from "${projectDir}/frontend/dist"
+    into "${buildDir}/resources/main/static"
+}
+// processResources 실행 전에 프론트엔드 빌드가 먼저 실행되도록 설정
+processResources.dependsOn.copyFrontend
 
 tasks.named('test') {
     useJUnitPlatform()
