@@ -37,4 +37,13 @@ public class RoomApiController {
         // 날짜가 없으면 사용가능한 모든 룸을 조회
         return ResponseEntity.ok(roomService.getAvailableRooms());
     }
+
+    // 지정한 룸 상세 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id){
+        return ResponseEntity.ok(roomService.getRoomById(id));
+    }
+
 }
+
+
