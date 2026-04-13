@@ -30,7 +30,8 @@ public class RoomApiController {
         if(checkIn != null && checkOut != null){ //체크인과 체크아웃이 존재하면
             // 해당날짜에 사용가능한 룸을 조회
             return ResponseEntity.ok(
-                    roomService.getAvailableRoomsForDates(checkIn, checkOut));
+                    roomService.getAvailableRoomsForDates(checkIn, checkOut)
+            );
         }
 
         // 날짜가 없으면 사용가능한 모든 룸을 조회
