@@ -34,7 +34,7 @@ public class ReservationDTO {
     @NotNull(message = "체크인 날짜를 선택해 주세요.")
     private LocalDate checkInDate ; //체크인 날짜
     @NotNull(message = "체크아웃 날짜를 선택해 주세요.")
-    private String checkOutDate; //체크아웃 날짜
+    private LocalDate checkOutDate; //체크아웃 날짜
     @NotNull(message = "투숙 인원을 입력해 주세요.")
     @Min(value = 1, message="투숙인원은 1명이상이어야 합니다.")
     private Integer numberOfGuests; // 인원수

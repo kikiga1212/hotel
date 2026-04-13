@@ -10,8 +10,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 // 자식테이블에 대한 비지니스 로직
@@ -38,7 +41,7 @@ public class ReservationService {
     }
 
     // 이메일 기준 예약 조회
-    public List<ReservationDTO> getResevationsByEmail(String email){
+    public List<ReservationDTO> getResevationByEmail(String email){
         return reservationRepository.findByGuestEmail(email).stream()
                 .map(this::toDTO).collect(Collectors.toList());
     }
@@ -55,7 +58,72 @@ public class ReservationService {
         }
 
         // 예약날짜 검증
-        if()
+        validateDates(dto.getCheckInDate(), dto.getCheckOutDate());
+        // 숙박일수 계산(체크인에서 체크아웃까지 날수)
+        long nights = ChronoUnit.DAYS.between(dto.getCheckInDate(), dto.getCheckOutDate());
+        // 총 금액 계산(날수*1일 숙박비)
+        BigDecimal totalPrice = room.getPricePerNight().multiply(BigDecimal.valueOf(nights));
+
+        // 저장할 Entity 생성
+        Reservation reservation = Reservation.builder()
+                .room(room)
+                .guestName(dto.getGuestName())
+                .guestEmail(dto.getGuestEmail())
+                .guestPhone(dto.getGuestPhone())
+                .checkinDate(dto.getCheckInDate())
+                .checkoutDate(dto.getCheckOutDate())
+                .numberOfGuests(dto.getNumberOfGuests())
+                .totalPrice(totalPrice)
+                .status(Reservation.ReservationStatus.PENDING)
+                .specialRequests(dto.getSpecialRequests())
+                .build();
+
+        return toDTO(reservationRepository.save(reservation));
+    }
+
+    // 예약에 상태 변경
+    @Transactional
+    public ReservationDTO updateStatus(Long id, Reservation.ReservationStatus status){
+        Reservation reservation = reservationRepository.findByIdWithRoom(id)
+                .orElseThrow(()->new RuntimeException("예약을 찾을 수 없습니다. ID:"+id));
+
+        reservation.setStatus(status);
+
+        return toDTO(reservationRepository.save(reservation));
+    }
+
+    // 예약 취소
+    @Transactional
+    public void cancelReservation(Long id){
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("예약을 찾을 수 없습니다. ID:"+id));
+        reservation.setStatus(Reservation.ReservationStatus.CANCELLED);
+
+        reservationRepository.save(reservation);
+    }
+
+    // 예약 삭제
+    @Transactional
+    public void deleteReservation(Long id){
+        reservationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("예약을 찾을 수 없습니다. ID:"+id));
+
+        reservationRepository.deleteById(id);
+    }
+
+
+    // 상태별 통계
+    public Map<String, Long> getStatusStatistics(){
+        return Map.of(
+                "PENDING", reservationRepository.countByStatus
+                        (Reservation.ReservationStatus.PENDING),
+                "CONFIRMED", reservationRepository.countByStatus
+                        (Reservation.ReservationStatus.CONFIRMED),
+                "CANCELLED", reservationRepository.countByStatus
+                        (Reservation.ReservationStatus.CANCELLED),
+                "COMPLETED", reservationRepository.countByStatus
+                        (Reservation.ReservationStatus.COMPLETED)
+        );
     }
 
     // 예약날짜 검증
