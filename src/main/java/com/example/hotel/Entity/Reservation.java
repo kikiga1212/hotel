@@ -27,6 +27,8 @@ public class Reservation {
     private LocalDate checkinDate; //체크인 날짜
     @Column(nullable = false)
     private LocalDate checkoutDate; //체크아웃 날짜
+    @Column(nullable = false)
+    private Integer numberOfGuests; // 투숙인원
     @Column(nullable = false, precision = 10, scale=2)
     private BigDecimal totalPrice; // 금액
     @Enumerated(EnumType.STRING)
