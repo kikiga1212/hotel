@@ -35,6 +35,8 @@ public class RoomService {
     }
 
     // 날짜기준으로 예약가능한 룸을 조회
+    // 룸 가용성 조회 (getAvailableRoomsForDates)
+    // 나중에 프론트엔드에서 "날짜 검색 시 빈 방만 보여주기" 기능을 구현할 때 핵심적인 역할을 할 것입니다.
     public List<RoomDTO> getAvailableRoomsForDates(LocalDate checkIn, LocalDate checkout){
         return roomRepository.findAvailableRooms(checkIn, checkout).stream()
                 .map(room->modelMapper.map(room, RoomDTO.class))
@@ -68,6 +70,8 @@ public class RoomService {
                 .orElseThrow(()->new RuntimeException("룸을 찾을 수 없습니다. ID:"+id));
 
         modelMapper.map(roomDTO, room); //  수정할 내용을 읽어온 Entity에 적용
+        // modelMapper.map(roomDTO, room);을 사용하여 엔티티를 업데이트
+        // 이 방식은 ModelMapperConfig에서 설정하신 setSkipNullEnabled(true) 덕분에 아주 안전하게 작동
         room.setId(id); // 지워질 것을 대비(오류)에서 기본키를 유지
 
         Room updatedRoom = roomRepository.save(room); // 저장(수정)
@@ -76,6 +80,7 @@ public class RoomService {
     }
 
     // 룸 삭제
+    @Transactional
     public void deleteRoom(Long id){
         roomRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("룸을 찾을 수 없습니다. ID:"+id));
@@ -83,6 +88,7 @@ public class RoomService {
         roomRepository.deleteById(id);
     }
 
+    // 영속성 컨텍스트의 변경 감지 활용
     // 룸 상태여부 토글(true<->false)
     @Transactional
     public RoomDTO toggleAvailablity(Long id){
@@ -91,6 +97,4 @@ public class RoomService {
         room.setAvailable(!room.getAvailable()); // 기존값을 반대로 변환
         return modelMapper.map(roomRepository.save(room), RoomDTO.class);
     }
-
-
 }
