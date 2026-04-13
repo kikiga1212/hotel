@@ -24,7 +24,7 @@ public class RoomDTO {
     private BigDecimal pricePerNight; //1박가격
     @Size(max=500, message = "설명은 500자 이내로 입력해주세요.")
     private String description; // 룸설명
-    private boolean available; // 사용여부
+    private Boolean available; // 사용여부
     private String imageUrl; // 이미지
 
 }
