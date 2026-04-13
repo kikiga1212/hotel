@@ -59,4 +59,12 @@ public class Room {
             return displayName;
         }
     }
+
+    // 양방향 연관관계 편의 메서드 추가 (제미나이 추천)
+    public void addReservation(Reservation reservation){
+        this.reservations.add(reservation);
+        if(reservation.getRoom() != this){
+            reservation.setRoom(this);
+        }
+    }
 }
