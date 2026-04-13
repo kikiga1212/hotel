@@ -28,7 +28,7 @@ public class ReservationDTO {
     @Email(message = "올바른 이메일 형식으로 입력해주세요.")
     private String guestEmail;
     @NotBlank(message = "연락처를 입력해주세요.")
-    @Pattern(regexp ="^[0-9-+]{10,20}&",
+    @Pattern(regexp ="^[0-9-+]{10,20}$",
     message = "올바른 연락처 형식으로 입력해주세요.")
     private String guestPhone; //전화번호
     @NotNull(message = "체크인 날짜를 선택해 주세요.")
@@ -46,6 +46,4 @@ public class ReservationDTO {
 
     private LocalDateTime createdAt; // 생성일자
     private LocalDateTime updatedAt; // 수정일자
-
-
 }

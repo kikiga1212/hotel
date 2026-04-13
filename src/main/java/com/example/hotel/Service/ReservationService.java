@@ -28,7 +28,7 @@ public class ReservationService {
 
     // 전체 예약 조회
     public List<ReservationDTO> getAllReservations(){
-        return reservationRepository.findAlWithRoom().stream()
+        return reservationRepository.findAllWithRoom().stream()
                 .map(this::toDTO).collect(Collectors.toList());
     }
 
@@ -41,7 +41,7 @@ public class ReservationService {
     }
 
     // 이메일 기준 예약 조회
-    public List<ReservationDTO> getResevationByEmail(String email){
+    public List<ReservationDTO> getReservationByEmail(String email){
         return reservationRepository.findByGuestEmail(email).stream()
                 .map(this::toDTO).collect(Collectors.toList());
     }

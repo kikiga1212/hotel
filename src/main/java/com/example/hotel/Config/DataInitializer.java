@@ -3,6 +3,7 @@ package com.example.hotel.Config;
 import com.example.hotel.Entity.Room;
 import com.example.hotel.Repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +15,16 @@ import java.util.List;
 // 테이블이 많으면 SQL문으로 따로 작성
 @Component
 @RequiredArgsConstructor
+@Slf4j //로그 레벨(INFO, DEBUG, ERROR)을 관리할 수 있고, 나중에 서버 배포 시 로그 파일로 저장하기 훨씬 유리
+// CommandLineRunner를 활용해 애플리케이션 시작 시점에
+// 데이터를 자동으로 주입하는 방식은 개발 단계에서 생산성을 크게 높여주는 아주 좋은 접근이다.
 public class DataInitializer implements CommandLineRunner {
     private final RoomRepository roomRepository;
 
     @Override
     public void run(String... args){
         // 테이블에 데이터가 없으면
+        //roomRepository.count() == 0 조건을 두어 중복 생성을 방지한 점
         if(roomRepository.count() == 0){
             List<Room> rooms = List.of(
                     Room.builder()
@@ -96,6 +101,7 @@ public class DataInitializer implements CommandLineRunner {
             // 동시에 여러개 저장
             roomRepository.saveAll(rooms); //리스트로 구성된 내용을 한번에 저장
             System.out.println("샘플 룸 데이터가 7개가 생성되었습니다.");
+            log.info("샘플 룸 데이터 {}개가 생성되었습니다.", rooms.size());
         }
     }
 }

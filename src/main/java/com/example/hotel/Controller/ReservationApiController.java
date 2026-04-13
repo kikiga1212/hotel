@@ -34,7 +34,7 @@ public class ReservationApiController {
     // 내 예약 조회
     @GetMapping("/my")
     public ResponseEntity<List<ReservationDTO>> getMyReservation(@RequestParam String email){
-        return ResponseEntity.ok(reservationService.getResevationByEmail(email));
+        return ResponseEntity.ok(reservationService.getReservationByEmail(email));
     }
 
     // 예약 취소
