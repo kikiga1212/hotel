@@ -25,7 +25,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(
             "SELECT r FROM Reservation r JOIN FETCH r.room WHERE r.id = :id "
     )
-    Optional<Reservation> findAlWithRoom(Long id);
+    Optional<Reservation> findByIdWithRoom(Long id);
 
     // 상태별로 예약 갯수 조회
     @Query(
