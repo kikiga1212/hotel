@@ -62,8 +62,8 @@ public class AdminController {
     }
 
     // 룸 생성 처리
-    @GetMapping("/rooms")
-    public String createRoom(@Valid @ModelAttribute RoomDTO roomDTO,
+    @PostMapping("/rooms")
+    public String createRoom(@Valid @ModelAttribute("roomDto") RoomDTO roomDTO,
     BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) { // 검증 실패시
             model.addAttribute("currentPage", "rooms");
@@ -93,8 +93,8 @@ public class AdminController {
     }
 
     // 룸 수정 처리
-    @GetMapping("/rooms/{id}")
-    public String updateRoom(@PathVariable Long id, @Valid @ModelAttribute RoomDTO roomDTO,
+    @PostMapping("/rooms/{id}")
+    public String updateRoom(@PathVariable Long id, @Valid @ModelAttribute("roomDto") RoomDTO roomDTO,
                              BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) { // 검증 실패시
             model.addAttribute("currentPage", "rooms");
@@ -108,13 +108,13 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("successMessage",
                     "룸을 수정하였습니다.");
         } catch (Exception e) {
-            redirectAttributes.addAttribute("errorMessage", e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/admin/rooms";
     }
 
     // 룸 활성/비활성 토글
-    @GetMapping("/rooms/{id}/toggle")
+    @PostMapping("/rooms/{id}/toggle")
     public String toggleAvailability(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         // redirectAttributes.addFlashAttribute 는 다른 맵핑(요청)으로 이동시 값을 가지고 이동
         try {
@@ -129,7 +129,7 @@ public class AdminController {
     }
 
     // 룸 삭제
-    @GetMapping("/rooms/{id}/delete")
+    @PostMapping("/rooms/{id}/delete")
     public String deleteRoom(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         // redirectAttributes.addFlashAttribute 는 다른 맵핑(요청)으로 이동시 값을 가지고 이동
         try {
@@ -173,7 +173,7 @@ public class AdminController {
         model.addAttribute("pageTitle", "예약 상세");
         model.addAttribute("reservation", reservationService.getReservationById(id)); // 검증을 위한 빈 DTO전달
         model.addAttribute("statuses", Reservation.ReservationStatus.values());
-        return "admin/resevation-detail";
+        return "admin/reservation-detail";
     }
 
     // 예약 상태 변경

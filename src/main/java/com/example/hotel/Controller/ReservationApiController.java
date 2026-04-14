@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 // 예약 테이블에 대한 비동기식 요청처리
+@RestControllerAdvice // 현재 각 메서드마다 try-catch로 RuntimeException을 처리하고 계신데,
+// 이렇게 하면 컨트롤러 코드가 길어지고 중복이 발생합니다.
+// @RestControllerAdvice를 사용하면 컨트롤러를 깨끗하게 유지하면서 에러를 통합 관리할 수 있습니다.
 @RestController
 @RequestMapping("/api/reservations")
 @RequiredArgsConstructor
@@ -47,4 +50,15 @@ public class ReservationApiController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
+// 별도의 GlobalExceptionHandler 클래스 생성 예시
+//@RestControllerAdvice
+//public class GlobalExceptionHandler {
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+//        return ResponseEntity.badRequest().body(e.getMessage());
+//    }
+//}
+// 이렇게 하면 컨트롤러에서는 try-catch를 모두 제거하고 비즈니스 로직에만 집중할 수 있습니다.
 }
