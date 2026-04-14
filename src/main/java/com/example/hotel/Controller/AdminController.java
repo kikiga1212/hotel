@@ -63,7 +63,7 @@ public class AdminController {
 
     // 룸 생성 처리
     @PostMapping("/rooms")
-    public String createRoom(@Valid @ModelAttribute("roomDto") RoomDTO roomDTO,
+    public String createRoom(@Valid @ModelAttribute("roomDto") RoomDTO roomDto,
     BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) { // 검증 실패시
             model.addAttribute("currentPage", "rooms");
@@ -73,7 +73,7 @@ public class AdminController {
         }
         // redirectAttributes.addFlashAttribute 는 다른 맵핑(요청)으로 이동시 값을 가지고 이동
         try {
-            roomService.createRoom(roomDTO);
+            roomService.createRoom(roomDto);
             redirectAttributes.addFlashAttribute("successMessage",
                     "새로운 룸을 등록하였습니다.");
         } catch (Exception e) {
@@ -94,7 +94,7 @@ public class AdminController {
 
     // 룸 수정 처리
     @PostMapping("/rooms/{id}")
-    public String updateRoom(@PathVariable Long id, @Valid @ModelAttribute("roomDto") RoomDTO roomDTO,
+    public String updateRoom(@PathVariable Long id, @Valid @ModelAttribute("roomDto") RoomDTO roomDto,
                              BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) { // 검증 실패시
             model.addAttribute("currentPage", "rooms");
@@ -104,7 +104,7 @@ public class AdminController {
         }
         // redirectAttributes.addFlashAttribute 는 다른 맵핑(요청)으로 이동시 값을 가지고 이동
         try {
-            roomService.updatedRoom(id, roomDTO);
+            roomService.updatedRoom(id, roomDto);
             redirectAttributes.addFlashAttribute("successMessage",
                     "룸을 수정하였습니다.");
         } catch (Exception e) {
