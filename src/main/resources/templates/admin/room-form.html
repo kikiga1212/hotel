@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout::head}">
+    <title>룸 관리</title>
+</head>
+<body class="bg-light">
+<nav th:replace="~{fragments/layout::navbar}"></nav>
+<div class="contanier-fluid py-4">
+    <!-- 메시지-->
+    <div th:replace="~{fragments/layout::flashMessages}"></div>
+    <!-- 제목-->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 fw-bold">
+            <i class="bi bi-door-open me-2 text-primary"></i>
+            <span th:text="${roomDto.id != null?'룸 수정':'룸 등록'}">룸 등록</span>
+        </h2>
+        <a href="/admin/rooms" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> 목록으로
+        </a>
+    </div>
+    <!-- 폼 카드-->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <form th:action="${roomDto.id != null? '/admin/rooms/'+roomDto.id:'/admin/rooms'}"
+            th:object="${roomDto}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-8"><!-- 룸 이름-->
+                        <label class="form-label fw-semibold">
+                            룸 이름<span class="text-danger">*</span>
+                        </label>
+                        <input type="text" class="form-control" th:field="*{name}"
+                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                        placeholder="예: 디럭스 오션뷰 201">
+
+                        <div class="invalid-feedback" th:errors="*{name}"></div><!--오류출력 -->
+                    </div>
+                    <div class="col-md-4"><!-- 룸 타입-->
+                        <label class="form-label fw-semibold">
+                            룸 타입<span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select" th:field="*{roomType}"
+                                th:classappend="${#fields.hasErrors('roomType')}?'is-invalid'">
+                            <option value="">-- 선택 --</option>
+                            <option th:each="type:${roomTypes}"
+                            th:value="${type.name()}" th:text="${type.displayName}"></option>
+                        </select>
+
+                        <div class="invalid-feedback" th:errors="*{roomType}"></div><!--오류출력 -->
+                    </div>
+                    <div class="col-md-6"><!-- 수용인원-->
+                        <label class="form-label fw-semibold">
+                            수용 인원<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" th:field="*{capacity}"
+                                   th:classappend="${#fields.hasErrors('capacity')} ? 'is-invalid'"
+                                   placeholder="2" min="1" max="20">
+                            <span class="input-group-text">명</span>
+
+                            <div class="invalid-feedback" th:errors="*{roomType}"></div><!--오류출력 -->
+                        </div>
+                    </div>
+                    <div class="col-md-6"><!-- 1박 가격-->
+                        <label class="form-label fw-semibold">
+                            1박 가격<span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" th:field="*{pricePerNight}"
+                                   th:classappend="${#fields.hasErrors('pricePerNight')} ? 'is-invalid'"
+                                   placeholder="150000" min="1" max="1000000">
+                            <span class="input-group-text">원</span>
+
+                            <div class="invalid-feedback" th:errors="*{pricePerNight}"></div><!--오류출력 -->
+                        </div>
+                    </div>
+                    <div class="col-md-12"><!-- 이미지-->
+                        <label class="form-label fw-semibold">
+                            이미지 URL
+                        </label>
+                        <input type="text" class="form-control" th:field="*{imageUrl}"
+                               placeholder="https://example.com/room-image.jpa">
+
+                        <div class="form-text">룸 이미지 URL을 입력하세요(선택사항)</div><!--오류출력 -->
+                    </div>
+                    <div class="col-md-12"><!-- 설명-->
+                        <label class="form-label fw-semibold">
+                            룸 설명
+                        </label>
+                        <textarea class="form-control" th:field="*{description}"
+                        th:classappend="${#fields.hasErrors('description')}?'is-invalid'"
+                        rows="4" placeholder="룸에 대한 설명을 입력하세요..."></textarea>
+
+                        <div class="invalid-feedback" th:errors="*{description}"></div><!--오류출력 -->
+                    </div>
+                    <div class="col-md-12"><!-- 사용 가능 여부-->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" th:field="*{available}"
+                            id="available">
+                            <label class="form-check-label fw-semibold" for="available">
+                                예약 가능 여부
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my=4"><!-- 수평선-->
+                <div class="d-flex gap-2 justify-content-end">
+                    <a href="/admin/rooms" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-lg me-1"></i> 취소
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>
+                        <span th:text="${roomDto.id != null? '수정 저장' : '신규 등록'}">저장</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
