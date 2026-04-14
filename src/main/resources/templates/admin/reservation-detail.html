@@ -1,11 +1,147 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout::head}">
-    <title>룸 관리</title>
+    <title>예약 상세</title>
 </head>
 <body class="bg-light">
 <nav th:replace="~{fragments/layout::navbar}"></nav>
-<div class="contanier-fluid py-4"></div>
+<div class="container-fluid py-4">
+    <!-- 성공/에러메시지-->
+    <div th:replace="~{fragments/layout::flashMessages}"></div>
+    <!-- 제목-->
+    <div  class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-2 fw-bold">
+            <i class="bi bi-calendar-check me-2 text-primary"></i> 예약 상세
+            <span class="text-muted fs-5" th:text="'#'+${reservation.id}"></span>
+        </h2>
+        <a href="/admin/reservations" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> 목록으로
+        </a>
+    </div>
+    <!-- 본문-->
+    <div class="row g-4">
+        <div class="col-lg-8"><!-- 예약 상세 정보-->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-person me-2"></i> 고객 정보
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0"><!-- 리스트(ol, ul,=>li , dl=>dt, dd)-->
+                        <dt class="col-sm-4 text-muted">이름</dt>
+                        <dd class="col-sm-8 fw-semibold" th:text="${reservation.guestName}"></dd>
+
+                        <dt class="col-sm-4 text-muted">이메일</dt>
+                        <dd class="col-sm-8 fw-semibold" th:text="${reservation.guestEmail}"></dd>
+
+                        <dt class="col-sm-4 text-muted">연락처</dt>
+                        <dd class="col-sm-8 fw-semibold" th:text="${reservation.guestPhone}"></dd>
+
+                        <dt class="col-sm-4 text-muted">특별 요청사항</dt>
+                        <dd class="col-sm-8 fw-semibold" th:text="${reservation.specialRequests?:'없음'}"></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-door-open me-2"></i> 예약 정보
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">룸</dt>
+                        <dd class="col-sm-8">
+                            <span class="fw-semibold" th:text="${reservation.roomName}"></span>
+                            <span class="badge bg-secondary ms-2" th:text="${reservation.roomType}"> </span>
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">체크인</dt>
+                        <dd class="col-sm-8 fw-semibold" th:text="${reservation.checkInDate}"></dd>
+
+                        <dt class="col-sm-4 text-muted">체크아웃</dt>
+                        <dd class="col-sm-8 fw-semibold" th:text="${reservation.checkOutDate}"></dd>
+
+                        <dt class="col-sm-4 text-muted">투숙 인원</dt>
+                        <dd class="col-sm-8" th:text="${reservation.numberOfGuests}+' 명'"></dd>
+
+                        <dt class="col-sm-4 text-muted">금액</dt>
+                        <dd class="col-sm-8 fw-bold text-primary fs-5"
+                        th:text="${#numbers.formatDecimal(reservation.totalPrice,0,'COMMA',0,'POINT')+' 원'}"></dd>
+
+                        <dt class="col-sm-4 text-muted">예약일시</dt>
+                        <dd class="col-sm-8" th:text="${reservation.createdAt}"></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4"><!-- 상태 관리-->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-gear me-2"></i> 예약 상태 관리
+                    </h5>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="text-muted">현재 상태:</span>
+                            <span th:switch="${reservation.status?.name()}">
+                                <span th:case="'PENDING'" class="badge bg-warning text-dark fs-6"
+                                th:text="${reservation.statusDisplayName}"></span>
+
+                                 <span th:case="'CONFIRMED'" class="badge bg-success fs-6"
+                                       th:text="${reservation.statusDisplayName}"></span>
+
+                                 <span th:case="'CANCELLED'" class="badge bg-danger fs-6"
+                                       th:text="${reservation.statusDisplayName}"></span>
+
+                                 <span th:case="'COMPLETED'" class="badge bg-secondary text-dark fs-6"
+                                       th:text="${reservation.statusDisplayName}"></span>
+                            </span>
+                        </div>
+                        <form th:action="@{/admin/reservations/{id}/status(id=${reservation.id})}"
+                        method="post">
+                            <div class="mb-3">
+                                <label class="form-label">상태 변경</label>
+                                <select name="status" class="form-select">
+                                    <option th:each="s:${statuses}"
+                                    th:value="${s.name()}"
+                                    th:text="${s.displayName}"
+                                    th:selected="${s == reservation.status}"></option>
+                                </select>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-arrow-repeat me-1"></i> 상태변경
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="card border-0 shadow-sm border-danger"><!-- 삭제-->
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold text-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i> 위험 구역
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">예약을 삭제하면 복구할 수 없습니다.</p>
+
+                    <form th:action="@{/admin/reservations/{id}/delete(id=${reservation.id})}"
+                    method="post" onsubmit="return confirm('정말 이 예약을 삭제하시겠습니까?')">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="bi bi-trash me-1"></i> 예약 삭제
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
