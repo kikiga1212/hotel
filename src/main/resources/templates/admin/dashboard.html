@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!--공통 head fragment 사용 -->
+<head th:replace="~{fragments/layout::head}">
+    <title>대시보드</title>
+</head>
+
+<body class="bg-light">
+<!--공통 navbar fragment -->
+    <nav th:replace="~{fragments/layout::navbar}"></nav>
+    <!--본문 -->
+    <div class="container-fluid py-4">
+        <!--성공/에러 메시지 영역(삽입,수정) -->
+        <div th:replace="~{fragments/layout::flashMessages}"></div>
+        <!--페이지 타이틀 -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0 fw-bold">
+                <i class="bi bi-sppedometer2 me-2 text-primary"></i>대시보드
+            </h2>
+            <span class="text-muted" id="currentDate"></span><!--현재날짜를 스크립트로구현 -->
+
+        </div>
+        <!-- 통계 분석 카드-->
+        <div class="row g-4 mb-4">
+            <!-- 전체 룸-->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3"><!-- 아이콘-->
+                            <i class="bi bi-door-open fs-4 text-primary"></i>
+                        </div>
+                        <div><!-- 통계정보-->
+                            <div class="text-muted small">전체 룸</div>
+                            <div class="fs-3 fw-bold text-primary" th:text="${totalRooms}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 예약 가능 룸-->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3"><!-- 아이콘-->
+                            <i class="bi bi-check-circle fs-4 text-success"></i>
+                        </div>
+                        <div><!-- 통계정보-->
+                            <div class="text-muted small">예약 가능 룸</div>
+                            <div class="fs-3 fw-bold text-success" th:text="${availableRooms}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 대기 예약-->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3"><!-- 아이콘-->
+                            <i class="bi bi-hourglass-split fs-4 text-warning"></i>
+                        </div>
+                        <div><!-- 통계정보-->
+                            <div class="text-muted small">대기 예약</div>
+                            <div class="fs-3 fw-bold text-warning" th:text="${pendingCount}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 확정 예약-->
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="rounded-circle bg-info bg-opacity-10 p-3 me-3"><!-- 아이콘-->
+                            <i class="bi bi-calendar-check fs-4 text-info"></i>
+                        </div>
+                        <div><!-- 통계정보-->
+                            <div class="text-muted small">확정예약</div>
+                            <div class="fs-3 fw-bold text-info" th:text="${confirmedCount}">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- 최근 예약 테이블-->
+        <div class="card border-0 shadow-sm">
+            <!-- 제목-->
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 fw-semibold">
+                <i class="bi bi-list-ul me-2"></i> 최근 예약 현황
+                </h5>
+                <!-- 전체 예약 페이지 이동-->
+                <a href="/admin/reservations" class="btn btn-sm btn-outline-primary">전체 보기</a>
+            </div>
+            <!-- 테이블-->
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <!-- 테이블 제목-->
+                        <thead class="table-light">
+                        <tr>
+                            <th class="ps-3">예약번호</th>
+                            <th>고객명</th>
+                            <th>룸</th>
+                            <th>체크인</th>
+                            <th>체크아웃</th>
+                            <th>금액</th>
+                            <th>상태</th>
+                            <th class="text-center">관리</th>
+                        </tr>
+                        </thead>
+                        <!-- 테이블 본문-->
+                        <tbody>
+                        <!-- 예약이 없을 경우-->
+                        <tr th:if="${#lists.isEmpty(recentReservations)}"><!-- 예약목록이 없으면-->
+                            <td colspan="8" class="text-center text-muted py-4"><!-- colspan칸 합치기-->
+                                예약 내역이 없습니다.
+                            </td>
+                        </tr>
+                        <!-- 최근 예약 목록(확인은 나중에)-->
+                        <tr th:each="res, resStat:${recentReservations}"
+                        th:if="${resStat.index<10}"><!-- 0~9까지 10회반복-->
+                            <td class="ps-3 fw-semibold" th:text="'#'+${res.id}">예약ID</td>
+                            <td th:text="${res.guestName}">이름</td>
+                            <td>
+                                <span class="fw-semibold" th:text="${res.roomName}"></span><br>
+                                <samll class="text-muted" th:text="${res.roomType}"></samll>
+                            </td>
+                            <td th:text="${res.checkInDate}">체크인</td>
+                            <td th:text="${res.checkOutDate}">체크아웃</td>
+                            <td th:text="${#numbers.formatDecimal(res.totalPrice,0,'COMMA',0,'POINT')+'원'}">
+                            <td>
+                                <span th:switch="${res.status?.name()}"><!-- 조건이 같은 것을 처리-->
+                                    <span th:case="'PENDING'" class="badge bg-warning text-dark"
+                                    th:text="${res.statusDisplayName}"> </span>
+                                    <span th:case="'CONFIRMED'" class="badge bg-success"
+                                          th:text="${res.statusDisplayName}"> </span>
+                                    <span th:case="'CANCELLED'" class="badge bg-danger"
+                                          th:text="${res.statusDisplayName}"> </span>
+                                    <span th:case="'COMPLETED'" class="badge bg-secondary"
+                                          th:text="${res.statusDisplayName}"> </span>
+                                </span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/reservations/{id}(id=${res.id})"
+                                class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    document.getElementById('currentDate').textContent =
+        new Date().toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long'
+        });
+</script>
+
+</body>
+</html>
