@@ -98,26 +98,26 @@
                                         <i th:class="${room.available?'bi bi-toggle-on':'bi bi-toggle-off'}"></i>
                                     </button>
                                 </form>
-                                <form action=""><!-- 삭제-->
-
+                                <form th:action="@{/admin/rooms/{id}/delete(id=${room.id})}"
+                                method="post" class="d-inline" onsubmit="return confirm('정말 삭제하시겠습니까?')"><!-- 삭제-->
+                                    <button type="submit" class="btn btn-outline-danger" title="삭제">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
                             </div>
                         </td>
-                        <td></td>
                     </tr>
-
                     </tbody>
-
                 </table>
-
             </div>
-
+        </div>
+        <!-- 테이블 푸터 -->
+        <div class="card-footer bg-white text-muted">
+            전체 <span th:text="${#lists.size(rooms)}">0</span> 개 룸
         </div>
 
     </div>
-
 </div>
-
 
 </body>
 </html>
