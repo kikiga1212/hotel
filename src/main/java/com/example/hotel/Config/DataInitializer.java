@@ -1,6 +1,8 @@
 package com.example.hotel.Config;
 
+import com.example.hotel.Entity.Reservation;
 import com.example.hotel.Entity.Room;
+import com.example.hotel.Repository.ReservationRepository;
 import com.example.hotel.Repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 // 초기데이터 등록
@@ -20,6 +23,7 @@ import java.util.List;
 // 데이터를 자동으로 주입하는 방식은 개발 단계에서 생산성을 크게 높여주는 아주 좋은 접근이다.
 public class DataInitializer implements CommandLineRunner {
     private final RoomRepository roomRepository;
+    private final ReservationRepository reservationRepository;
 
     @Override
     public void run(String... args){
@@ -102,6 +106,55 @@ public class DataInitializer implements CommandLineRunner {
             roomRepository.saveAll(rooms); //리스트로 구성된 내용을 한번에 저장
             System.out.println("샘플 룸 데이터가 7개가 생성되었습니다.");
             log.info("샘플 룸 데이터 {}개가 생성되었습니다.", rooms.size());
+        }
+
+        // === Reservation 초기 데이터 ===
+        if (reservationRepository.count() == 0) {
+
+            List<Room> rooms = roomRepository.findAll();
+
+            Reservation r1 = Reservation.builder()
+                    .room(rooms.get(3))
+                    .guestName("홍길동")
+                    .guestEmail("hong@example.com")
+                    .guestPhone("010-1234-5678")
+                    .checkInDate(LocalDate.now().plusDays(1))
+                    .checkOutDate(LocalDate.now().plusDays(3))
+                    .numberOfGuests(2)
+                    .totalPrice(new BigDecimal("240000"))
+                    .status(Reservation.ReservationStatus.CONFIRMED)
+                    .specialRequests("조용한 방 요청")
+                    .build();
+
+            Reservation r2 = Reservation.builder()
+                    .room(rooms.get(4))
+                    .guestName("김철수")
+                    .guestEmail("kim@example.com")
+                    .guestPhone("010-9876-5432")
+                    .checkInDate(LocalDate.now().plusDays(5))
+                    .checkOutDate(LocalDate.now().plusDays(7))
+                    .numberOfGuests(2)
+                    .totalPrice(new BigDecimal("440000"))
+                    .status(Reservation.ReservationStatus.PENDING)
+                    .specialRequests("오션뷰 확정 요청")
+                    .build();
+
+            Reservation r3 = Reservation.builder()
+                    .room(rooms.get(5))
+                    .guestName("이영희")
+                    .guestEmail("lee@example.com")
+                    .guestPhone("010-5555-6666")
+                    .checkInDate(LocalDate.now().plusDays(10))
+                    .checkOutDate(LocalDate.now().plusDays(12))
+                    .numberOfGuests(4)
+                    .totalPrice(new BigDecimal("900000"))
+                    .status(Reservation.ReservationStatus.CONFIRMED)
+                    .specialRequests("유아 침대 요청")
+                    .build();
+
+            reservationRepository.saveAll(List.of(r1, r2, r3));
+
+            System.out.println("✅ 예약 데이터 3개가 생성되었습니다.");
         }
     }
 }
