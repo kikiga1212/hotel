@@ -87,3 +87,12 @@
 </div>
 </body>
 </html>
+<!--
+th:fragment를 활용해 공통 요소(Header, Navbar, Messages)를 분리해두면,
+나중에 새로운 관리 페이지를 추가할 때 코드 중복 없이 th:replace나 th:insert만으로 간편하게 레이아웃을 구성할 수 있습니다.
+1. th:classappend를 활용한 동적 메뉴 활성화
+currentPage 변수 값에 따라 active 클래스를 추가하는 방식은 아주 훌륭합니다.
+3. Flash Messages 레이아웃
+성공(successMessage)과 오류(errorMessage) 메시지를 부트스트랩 알림창(Alert)으로 구현하
+셨는데, alert-dismissible 클래스를 넣어 사용자가 직접 닫을 수 있게 한 점이 실무적입니다.
+-->

@@ -5,7 +5,7 @@
 </head>
 <body class="bg-light">
 <nav th:replace="~{fragments/layout::navbar}"></nav>
-<div class="contanier-fluid py-4">
+<div class="container-fluid py-4">
     <!-- 메시지-->
     <div th:replace="~{fragments/layout::flashMessages}"></div>
     <!-- 페이지 제목-->
@@ -50,12 +50,16 @@
                         <td class="ps-3 align-middle text-muted" th:text="${room.id}"></td>
                         <td class="align-middle">
                             <img th:src="${room.imageUrl}"
-                            arc="https://dummyimage.com/80x55" alt="룸 이미지"
+                            src="https://dummyimage.com/80x55" alt="룸 이미지"
                             class="rounded" style="width: 80px; height: 55px; object-fit: cover"
                             onerror="this.src='https://dummyimage.com/80x55?text=No%20Image'">
+                            <!--이미지 예외 처리: onerror를 통해 dummyimage.com을 활용한 점은 실제 서비스 운영 시
+                            이미지가 깨지는 것을 방지하는 아주 좋은 습관입니다.-->
                         </td>
                         <td class="align-middle fw-semibold" th:text="${room.name}"></td>
                         <td class="align-middle">
+                            <!-- Enum 상태 표시: th:switch를 사용해 룸 타입별로 다른 색상의 뱃지(badge)를 부여한 점이
+                            시각적으로 정보를 구분하기 매우 편합니다.-->
                             <span th:switch="${room.roomType?.name()}">
                                 <span th:case="'STANDARD'" class="badge bg-secondary">
                                     스탠다드
@@ -91,13 +95,29 @@
                                 class="btn btn-outline-primary" title="수정"><!-- 수정-->
                                     <i class="bi bi-pencil"></i>
                                 </a>
+                                <!-- 보안과 정석 준수: 토글(Toggle)과 삭제(Delete) 기능을 단순히 링크(<a>)가 아닌
+                                form 태그와 POST 메서드로 구현하신 점이 보안상 매우 훌륭합니다.-->
+                                <!-- 2. 동적 피드백: th:classappend와 삼항 연산자
+                                    이 코드의 묘미는 상태에 따라 디자인이 실시간으로 변한다는 점입니다.
+                                    th:classappend: 기존 클래스에 조건부로 클래스를 추가합니다.
+                                    room.available이 true이면: btn-outline-warning (주의/경고의 노란색)
+                                    room.available이 false이면: btn-outline-secondary (비활성화된 느낌의 회색)
+                                    아이콘의 변화: bi-toggle-on과 bi-toggle-off가 교체되면서 관리자가
+                                    "아, 지금 이 방이 켜져 있구나/꺼져 있구나"를 글자를 읽지 않고도 직관적으로 알게 해줍니다.-->
                                 <form th:action="@{/admin/rooms/{id}/toggle(id=${room.id})}"
                                 method="post" class="d-inline"><!-- 활성/비활성 토글-->
-                                    <button type="submit" class="btn btn-outline-warning"
+                                    <button type="submit"
+                                            th:classappend="${room.available} ? 'btn btn-outline-warning' : 'btn btn-outline-secondary'"
+                                            th:title="${room.available ? '비활성화 하기' : '활성화 하기'}">
+                                        <i th:class="${room.available ? 'bi bi-toggle-on' : 'bi bi-toggle-off'}"></i>
+                                    </button>
+
+                                 <!--   <button type="submit" class="btn btn-outline-warning"
                                     th:title="${room.available?'비활성화':'활성화'}">
                                         <i th:class="${room.available?'bi bi-toggle-on':'bi bi-toggle-off'}"></i>
-                                    </button>
+                                    </button> -->
                                 </form>
+                                <!--삭제 확인창: onsubmit="return confirm(...)"을 넣으신 것은 매우 안전한 설계입니다.-->
                                 <form th:action="@{/admin/rooms/{id}/delete(id=${room.id})}"
                                 method="post" class="d-inline" onsubmit="return confirm('정말 삭제하시겠습니까?')"><!-- 삭제-->
                                     <button type="submit" class="btn btn-outline-danger" title="삭제">
