@@ -24,9 +24,9 @@ public class Reservation {
     @Column(nullable = false, length = 20)
     private String guestPhone; //예약자 전화번호
     @Column(nullable = false)
-    private LocalDate checkinDate; //체크인 날짜
+    private LocalDate checkInDate; //체크인 날짜
     @Column(nullable = false)
-    private LocalDate checkoutDate; //체크아웃 날짜
+    private LocalDate checkOutDate; //체크아웃 날짜
     @Column(nullable = false)
     private Integer numberOfGuests; // 투숙인원
     @Column(nullable = false, precision = 10, scale=2)
