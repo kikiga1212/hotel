@@ -68,6 +68,22 @@
         </div>
     </div>
 </nav>
-
+<!-- 성공/오류 메시지 표시-->
+<div th:fragment="flashMessages">
+    <!-- 성공메시지-->
+    <div th:if="${successMessage}" role="alert"
+    class="alert alert-success alert-dismissible fade show"><!-- 성공메시지를 받았으면-->
+        <i class="bi bi-check-circle me-2"></i>
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <!-- 실패(오류)메시지-->
+    <div th:if="${errorMessage}" role="alert"
+         class="alert alert-danger alert-dismissible fade show"><!-- 오류메시지를 받았으면-->
+        <i class="bi bi-exclamation-circle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+</div>
 </body>
 </html>
