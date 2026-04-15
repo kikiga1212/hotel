@@ -26,7 +26,12 @@ function App() {
                     <Route path={"/rooms"} element={<RoomListPage/>}/>
                     {/* 룸 상세정보*/}
                     {/* 변화가 있는 값(변수)는 : 변수 */}
+                    <Route path={"/rooms/:id"} element={<RoomDetailPage/>}/>
+                    {/*예약 생성페이지*/}
                     <Route path={"/booking/:roomId"} element={<BookingPage/>}/>
+
+                    {/*예약 완료 페이지*/}
+                    <Route path={"/booking/complete"} element={<BookingCompletePage/>}/>
 
                     {/* 내 예약 조회 페이지 */}
                     <Route path={"/my-reservations"} element={<MyReservationPage/>}/>
