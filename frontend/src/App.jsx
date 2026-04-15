@@ -9,6 +9,8 @@ import BookingPage from "./pages/BookingPage.jsx";
 import BookingCompletePage from "./pages/BookingCompletePage.jsx";
 import MyReservationPage from "./pages/MyReservationPage.jsx";
 import RoomListPage from "./pages/RoomListPage.jsx";
+import RoomDetailPage from "./pages/RoomDetailPage.jsx";
+
 function App() {
 
 
