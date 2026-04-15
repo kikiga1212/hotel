@@ -62,7 +62,7 @@ function RoomListPage(){
     const handleReset = () => {
         setCheckIn('')
         setCheckOut('')
-        setCheckOut('')
+        setSelectedType('')
         setSearched(false);
 
         // 전체 데이터 조회
@@ -186,14 +186,13 @@ function RoomListPage(){
                     </div>
                 )}
                 {/* 룸 리스트 */}
-                {!loading && !error && filteredRooms.length === 0 && (
+                {!loading && !error && filteredRooms.length > 0 && (
                     <div className={"row g-4"}>
                         {filteredRooms.map(room => (
                             <RoomCard key={room.id} room={room} />
                         ))}
                     </div>
                 )}
-
 
             </div>
         </>
