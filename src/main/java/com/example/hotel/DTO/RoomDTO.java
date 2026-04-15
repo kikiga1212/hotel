@@ -26,5 +26,4 @@ public class RoomDTO {
     private String description; // 룸설명
     private Boolean available; // 사용여부
     private String imageUrl; // 이미지
-
 }

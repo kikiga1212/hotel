@@ -1,121 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+// springboot에서 controller 처럼 맵핑처리
 import './App.css'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
+// 공용 페이지
+import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
+import BookingPage from "./pages/BookingPage.jsx";
+import BookingCompletePage from "./pages/BookingCompletePage.jsx";
+import MyReservationPage from "./pages/MyReservationPage.jsx";
+import RoomListPage from "./pages/RoomListPage.jsx";
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+    return (
+        <BrowserRouter>{/* 페이지 구성, layout 역할 */}
+            <div className={"d-flex flex-column min-vh-100"}>
+                {/* 상단메뉴(변동없는 공용페이지) */}
+                <Navbar/>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+                {/* 메인페이지(여러 페니지로 구성) */}
+                <Routes> {/* @Controller */}
+                    {/* path => @Mapping(), element => return 페이지 */}
+                    {/* 룸 목록*/}
+                    <Route path={"/"} element={<RoomListPage/>}/>
+                    <Route path={"/rooms"} element={<RoomListPage/>}/>
+                    {/* 룸 상세정보*/}
+                    {/* 변화가 있는 값(변수)는 : 변수 */}
+                    <Route path={"/booking/:roomId"} element={<BookingPage/>}/>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+                    {/* 내 예약 조회 페이지 */}
+                    <Route path={"/my-reservations"} element={<MyReservationPage/>}/>
+
+                </Routes>
+              {/* 하단 */}
+              <Footer/>
+            </div>
+
+
+
+        </BrowserRouter>
+      )
 }
 
 export default App

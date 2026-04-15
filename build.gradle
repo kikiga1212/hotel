@@ -43,8 +43,9 @@ dependencies {
 // 프론트엔드 빌드(Node/Npm) (중복서버 사용시 필요)
 node {
     // Node.js 버전(안정화버전)
-    version = '20.10.0'
-    npmVersion = '10.2.3'
+    //version = '20.10.0'
+    version = '24.14.1'
+    npmVersion = '11.11.0'
     download = true
     // 프론트엔드가 설치된 위치
     nodeProjectDir = file("${projectDir}/frondtend")
