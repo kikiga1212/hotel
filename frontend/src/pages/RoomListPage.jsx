@@ -37,13 +37,15 @@ function RoomListPage(){
     const fetchRooms = async (ci, co)=>{ // RestController에 요청
         setLoading(true); // 요청처리중
         setError(null); // 오류없음
-        try{ // .ajax~success: ~error:
-            const res = await roomApi.getAll(ci, co); // 체크인과 체크아웃을 가지고 전체 조회 요청
-            setRooms(res.data); // 받아온 List<DTO>를 저장
-        }catch(e){ // 요청시 실패했을 때
-            setError("룸 정보를 불러오지 못했습니다.");
-        }finally {
-            setLoading(false); // 요청처리 종료
+
+        try {  //.ajax~success:~error:
+            const res = await roomApi.getAll(ci, co) //체크인과 체크아웃을 가지고 전체 조회 요청
+
+            setRooms(res.data) //받아온 List<DTO>를 저장
+        } catch(e) { //요청시 실패했을 때
+            setError("룸 정보를 불어오지 못했습니다.") //오류발생
+        } finally {
+            setLoading(false) //요청처리 종료
         }
     }
     // 날짜 검색
@@ -76,47 +78,49 @@ function RoomListPage(){
     return(
         <>
             <div className={"py-5 text-white text-center"}
-            style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%'}}>
-                {/* 타이틀 */}
-                <h1 className={"display-5 fw-bold mb-2"}>
-                    <i className={"bi bi-building me-3"}></i> 그랜드 호텔
-                </h1>
-                {/* 서브 타이틀 */}
-                <p className={"lead text-white-50 mb-4"}>
-                    최고의 휴식을 경험하세요.
-                </p>
-                {/* 날짜 검색 */}
-                <div className={"card border-0 shadow-lg mx-auto"}
-                style={{maxWidth: '700px', borderRadius: '16px'}}>
-                    <div className={"card-body p-4"}>
-                        <form onSubmit={handleSearch}>
-                            <div className={"row g-3 align-items-end"}>
-                                {/* 체크인 */}
-                                <div className={"col-md-5"}>
-                                    <label className={"form-label text-dark fw-semibold mb-1"}>
-                                        <i className={"bi bi-calendar-event me-1 text-primary"}></i> 체크인
-                                    </label>
-                                    <input type={"date"} className={"form-control form-control-lg"}
-                                    value={checkIn} min={today}
-                                    onChange={(e)=>setCheckIn(e.target.value)}/>
+                style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%'}}>
+                    <div className={"container py-3"}>
+                    {/* 타이틀 */}
+                    <h1 className={"display-5 fw-bold mb-2"}>
+                        <i className={"bi bi-building me-3"}></i> 그랜드 호텔
+                    </h1>
+                    {/* 서브 타이틀 */}
+                    <p className={"lead text-white-50 mb-4"}>
+                        최고의 휴식을 경험하세요.
+                    </p>
+                    {/* 날짜 검색 */}
+                    <div className={"card border-0 shadow-lg mx-auto"}
+                    style={{maxWidth: '700px', borderRadius: '16px'}}>
+                        <div className={"card-body p-4"}>
+                            <form onSubmit={handleSearch}>
+                                <div className={"row g-3 align-items-end"}>
+                                    {/* 체크인 */}
+                                    <div className={"col-md-5"}>
+                                        <label className={"form-label text-dark fw-semibold mb-1"}>
+                                            <i className={"bi bi-calendar-event me-1 text-primary"}></i> 체크인
+                                        </label>
+                                        <input type={"date"} className={"form-control form-control-lg"}
+                                        value={checkIn} min={today}
+                                        onChange={(e)=>setCheckIn(e.target.value)}/>
+                                    </div>
+                                    {/* 체크아웃 */}
+                                    <div className={"col-md-5"}>
+                                        <label className={"form-label text-dark fw-semibold mb-1"}>
+                                            <i className={"bi bi-calendar-event me-1 text-primary"}></i> 체크아웃
+                                        </label>
+                                        <input type={"date"} className={"form-control form-control-lg"}
+                                               value={checkOut} min={checkIn || tomorrow}
+                                               onChange={(e)=>setCheckOut(e.target.value)}/>
+                                    </div>
+                                    {/* 검색버튼 */}
+                                    <div className={"col-md-2"}>
+                                        <button type={"submit"} className={"btn btn-primary btn-lg w-100"}>
+                                            <i className={"bi bi-search"}></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                {/* 체크아웃 */}
-                                <div className={"col-md-5"}>
-                                    <label className={"form-label text-dark fw-semibold mb-1"}>
-                                        <i className={"bi bi-calendar-event me-1 text-primary"}></i> 체크아웃
-                                    </label>
-                                    <input type={"date"} className={"form-control form-control-lg"}
-                                           value={checkOut} min={checkIn || tomorrow}
-                                           onChange={(e)=>setCheckOut(e.target.value)}/>
-                                </div>
-                                {/* 검색버튼 */}
-                                <div className={"col-md-2"}>
-                                    <button type={"submit"} className={"btn btn-primary btn-lg w-100"}>
-                                        <i className={"bi bi-search"}></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -193,7 +197,6 @@ function RoomListPage(){
                         ))}
                     </div>
                 )}
-
             </div>
         </>
     )
