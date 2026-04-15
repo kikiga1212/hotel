@@ -20,7 +20,7 @@ function App() {
                 {/* 상단메뉴(변동없는 공용페이지) */}
                 <Navbar/>
 
-                {/* 메인페이지(여러 페니지로 구성) */}
+                {/* 메인페이지(여러 페이지로 구성) */}
                 <Routes> {/* @Controller */}
                     {/* path => @Mapping(), element => return 페이지 */}
                     {/* 룸 목록*/}

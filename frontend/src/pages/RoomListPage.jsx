@@ -53,10 +53,11 @@ function RoomListPage(){
         e.preventDefault(); // 폼전송을 방지
 
         if(checkIn && checkOut && checkIn >= checkOut){
-            alert('체크앙수 날짜는 체크인 날짜 이후여야 합니다.')
+            alert('체크아웃 날짜는 체크인 날짜 이후여야 합니다.')
             return;
         }
         fetchRooms(checkIn || undefined, checkOut ||undefined);
+        {/* 이는 백엔드 컨트롤러가 파라미터가 없을 때 어떻게 처리하느냐에 따라 중요합니다. */}
 
         setSearched(true); // 검색성공
     }
@@ -178,18 +179,21 @@ function RoomListPage(){
                     </div>
                 )}
 
-                {/* 데이터가 없을때 */}
+                {/* 데이터가 없을때 : 검색결과가 0개인 경우 */}
                 {!loading && !error && filteredRooms.length === 0 && (
                     <div className={"text-center py-5 text-muted"}>
                         <i className={"bi bi-inbox fs-1 d-block mb-3"}></i>
                         <h5>해당 조건의 객실이 없습니다.</h5>
-                        <button className={"btn btn-outline-primary mt-2"}
-                        onClick={handleReset}>
-                            전체 객실 보기
-                        </button>
+                        {/* 만약 필터를 걸었거나 검색을 했다면 전체보기를 유도 */}
+                        {(searched || selectedType !== '') && (
+                            <button className={"btn btn-outline-primary mt-2"}
+                            onClick={handleReset}>
+                                전체 객실 보기
+                            </button>
+                        )}
                     </div>
                 )}
-                {/* 룸 리스트 */}
+                {/* 룸 리스트 : 검색 결과가 있는 경우 */}
                 {!loading && !error && filteredRooms.length > 0 && (
                     <div className={"row g-4"}>
                         {filteredRooms.map(room => (
@@ -203,3 +207,18 @@ function RoomListPage(){
 }
 
 export default RoomListPage
+
+//스프링 부트와 리액트가 어떻게 데이터를 주고받는지 다시 한번 복습해 볼까요?
+
+//1. Component Mount: useEffect가 실행되면서 fetchRooms()가 호출됩니다.
+//
+//2. API Request: roomApi.getAll이 실행되어 백엔드(8080 포트)로 GET /api/rooms 요청을 보냅니다.
+//
+//3. State Update: 백엔드가 보내준 JSON 데이터를 setRooms(res.data)를 통해 리액트 상태에 저장합니다.
+//
+//4. Re-rendering: 상태가 변하면 리액트가 화면을 다시 그립니다. 이때 filteredRooms.map이 돌면서 우리가 만든 RoomCard들이 화면에 뿌려집니다.
+
+// 중괄호 {}로 자바스크립트를 시작하고, ()를 사용하여 JSX 엘리먼트를 즉시 반환(return)하겠다는 뜻입니다.
+// {{ }}
+//바깥쪽 { }: "이제 자바스크립트 시작한다!"라는 선언
+// 안쪽 { }: "이것은 자바스크립트의 객체(Object) 데이터다!"라는 뜻

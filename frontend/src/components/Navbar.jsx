@@ -27,13 +27,13 @@ function Navbar() { // 파일명과 동일하게 메소드를 정의
 
                 {/* 반응형웹 사용시 사용할 삼색버튼*/}
                 <button className={"navbar-toggler"} type={"button"}
-                        data-bs-toggle={"collapse"} data-bs-target={"navBarMain"}>
+                        data-bs-toggle={"collapse"} data-bs-target={"#navBarMain"}>
                     <span className={"navbar-toggler-icon"}></span>
                 </button>
 
                 {/* 메뉴 */}
                 <div className={"collapse navbar-collapse"} id={"navBarMain"}>
-                    {/* 왼쪽 메뉴 - 내부 페이지로 연결 */}
+                    {/* 왼쪽 메뉴 - 리액트 내부 페이지로 연결 Link : 새로고침없이 데이터교체만 되므로 속도가 빠름 */}
                     <ul className={"navbar-nav me-auto mb-2 mb-lg-0"}>
                         <li className={"nav-item"}>
                             {/* a=>Link, href=> to*/}
@@ -44,18 +44,28 @@ function Navbar() { // 파일명과 동일하게 메소드를 정의
 
                             </Link>
                         </li>
-                        <li>
+                        <li className={"nav-item"}>
+                            {/* 현재 '내 예약 확인' 메뉴에도 || location.pathname==='/' 조건이 들어있어,
+                              홈 화면일 때 두 메뉴가 동시에 활성화될 수 있습니다. 이를 분리하면 더 명확해집니다.*/}
+                            {/*
                             <Link className={`nav-link ${
                                 isActive('/my-reservations') || location.pathname==='/'?'active':''
                             }`} to={"/my-reservations"}>
                                 <i className={"bi bi-calendar-check me-1"}></i> 내 예약 확인
                             </Link>
+                            */}
+                            <Link className={`nav-link ${
+                                isActive('/my-reservations') ? 'active' : ''
+                            }`} to={"/my-reservations"}>
+                                <i className={"bi bi-calendar-check me-1"}></i> 내 예약 확인
+                            </Link>
+
                         </li>
                     </ul>
-                    {/* 오른쪽 관리자 버튼 - springboot로 연결 */}
+                    {/* 오른쪽 관리자 버튼 - springboot로 연결 : 외부/다른 서버이동시 a xorm */}
                     <div className={"d-flex gap-2"}>
                         <a href={"/admin"} className={"btn btn-outline-light btn-sm"}>
-                            <i className={"bi bi-ger me-1"}></i> 관리자
+                            <i className={"bi bi-gear me-1"}></i> 관리자
                         </a>
                     </div>
                 </div>

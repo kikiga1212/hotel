@@ -28,7 +28,7 @@ function BookingPage(){
         const fetchRoom = async () => {
             try{
                 const res = await  roomApi.getById(roomId);
-                setForm(res.data);
+                setRoom(res.data);
             }catch{
                 alert('룸 정보를 불러오지 못했습니다.')
                 navigate('/rooms')
@@ -37,7 +37,7 @@ function BookingPage(){
             }
         }
         fetchRoom();
-    }, [roomId]);
+    }, [roomId, navigate]);
 
     // 숙박일 계산
     const calcNights = ()=> {
@@ -58,7 +58,7 @@ function BookingPage(){
         setForm(prev => ({...prev, [name]:value}))
 
         // 이름 변경후 오류메시지 초기화
-        if(errors[name]){
+        if(error[name]){
             setError(prev =>({...prev, [name] : ''}))
         }
     }
@@ -73,7 +73,7 @@ function BookingPage(){
             newErrors.guestName = '이름을 입력해 주세요.'
         if (!form.guestEmail.trim()) // 이메일이 없으면
             newErrors.guestEmail = '이메일을 입력해 주세요.'
-        else if (!/\S+@\S+\.\S|/.test(form.guestEmail)) // 문자열@문자열.문자열
+        else if (!/\S+@\S+\.\S+/.test(form.guestEmail)) // 문자열@문자열.문자열
             newErrors.guestEmail = "올바른 이메일 형식으로 입력해 주세요."
         if (!form.guestPhone.trim())
             newErrors.guestPhone = '연락처를 입력해 주세요.'
@@ -104,17 +104,18 @@ function BookingPage(){
 
         try{ // 요청
             const res = await  reservationApi.create({
-                ...form, roomId: Number(roomId),
-                numberOfGuests: Number(orm.numberOfGuests)
+                ...form,
+                roomId: Number(roomId),
+                numberOfGuests: Number(form.numberOfGuests)
             })
-            navigate('/booking/complete'),{
-                state : {reservation: res.data, room}
-            }
+            navigate('/booking/complete',{
+                state : {reservation: res.data, room: room}
+            })
         }catch(err){
             const msg = err.response?.data || '예약에 실패했습니다. 다시 시도해 주세요.'
             alert(msg)
         }finally {
-            submitting (false);
+            setSubmitting(false);
         }
     }
 

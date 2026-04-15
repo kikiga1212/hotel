@@ -13,7 +13,7 @@ const roomTypeLabels = {
 
 function RoomDetailPage() {
 //변수
-    const {id} = useParams() //파라미터로 전달받은 값
+    const {id} = useParams() //파라미터로 전달받은 값 ,스프링 부트의 @PathVariable과 짝꿍
     const [room, setRoom] = useState(null) //룸정보
     const [loading, setLoading] = useState(true) //조회처리
     const [error, setError] = useState(null)
@@ -72,7 +72,7 @@ function RoomDetailPage() {
                  <div className={"col-lg-7"}>
                      <img src={room.imageUrl ||
                          'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800'}
-                     alt={room.n} className={"w-100 rounded-3 shadow"}
+                     alt={room.name} className={"w-100 rounded-3 shadow"}
                      style={{height: '420px', objectFit: 'cover'}}
                      onError={(e)=>{e.target.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800'}}/>
                  </div>
@@ -103,7 +103,7 @@ function RoomDetailPage() {
                              <div className={"col-6"}>
                                  <i className={"bi bi-tv fs-4 text-primary d-block mb-1"}></i>
                                  <div className={"fw-semibold"}>
-                                     평명 TV
+                                     평면 TV
                                  </div>
                                  <small className={"text-muted"}>기본 제공</small>
                              </div>
@@ -114,6 +114,14 @@ function RoomDetailPage() {
                                  </div>
                                  <small className={"text-muted"}>기본 제공</small>
                              </div>
+                             <div className={"col-6"}>
+                                 <i className={"bi bi-door-closed fs-4 text-primary d-block mb-1"}></i>
+                                 <div className={"fw-semibold"}>
+                                     {room.roomSize} m²
+                                 </div>
+                                 <small className={"text-muted"}>객실 크기</small>
+                             </div>
+
                          </div>
                      </div>
                      {/*가격정보*/}
@@ -127,7 +135,7 @@ function RoomDetailPage() {
                      {room.available?(
                          <Link to={`/booking/${room.id}`}
                          className={"btn btn-primary btn-lg w-100"}>
-                             <i className={"bi bi-caldendar-check me-2"}></i>
+                             <i className={"bi bi-calendar-check me-2"}></i>
                              지금 예약하기
                          </Link>
                      ):(
@@ -143,3 +151,11 @@ function RoomDetailPage() {
 }
 
 export default RoomDetailPage
+
+//지금 작성하신 코드에서 가장 중요한 부분은 const {id} = useParams()입니다. 스프링 부트의 @PathVariable과 짝꿍이라고 생각하시면 됩니다.
+//
+// 리액트 (App.jsx): <Route path="/rooms/:id" ... /> 로 "여기에 변수가 올 거야"라고 선언합니다.
+//
+// 리액트 (RoomDetailPage): useParams()가 주소창의 :id 자리에 있는 값을 쏙 뽑아냅니다.
+//
+// 스프링 부트 (Controller): @GetMapping("/rooms/{id}")를 통해 리액트가 보낸 ID를 받아서 DB에서 해당 방만 찾아줍니다.

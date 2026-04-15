@@ -28,7 +28,7 @@ function RoomCard({room}) {
         <div className={"col-md-6 col-lg-4"}>
             <div className={"card h-100 border-0 shadow-sm"}
             style={{borderRadius: '12px', overflow: 'hidden'}}> {/* 둥근모서리, 이미지 카드를 벗어나지 않게 */}
-                <div style={{position:'relative', height: '120px', overflow:'hidden'}}>{/* 호텔이미지 */}
+                <div style={{position:'relative', height: '200px', overflow:'hidden'}}>{/* 호텔이미지 */}
                     <img src={room.imageUrl || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800'}
                     alt={room.name} style={{width: '100%', height: '100%', objectFit: 'cover'}}
                     onError={(e)=> {
@@ -45,7 +45,7 @@ function RoomCard({room}) {
                 <div className={"card-body d-flex flex-column p-3"}>
                     <h5 className={"card-title fw-bold mb-1"}>{room.name}</h5>{/* 룸 이름 */}
                     <p className={"text-muted small mb-2"}>{/* 최대인원수 */}
-                        <i className={"bi bi-people me-1"}>최대 {room.capacity} 명</i>
+                        <i className={"bi bi-people me-1"}> 최대 {room.capacity} 명</i>
                     </p>
                     <p className={"card-text text-muted small mb-3 flex-grow-1"}
                     style={{display: '-webkit-box', WebkitLineClamp: 2,
