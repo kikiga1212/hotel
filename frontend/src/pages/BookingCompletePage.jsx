@@ -92,7 +92,6 @@ function BookingCompletePage(){
             </div>
         </div>
     )
-
 }
 
 export default BookingCompletePage
