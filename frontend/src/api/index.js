@@ -34,7 +34,7 @@ export const reservationApi = {
     create:(data) => api.post('/reservations',data),
     // 내 예약 조회(/api/reservations/my?email=aaa@gmail.com
     getByEmail: (email) => api.get('/reservations/my', { params: { email } }),
-    //getbyReservation : (email) => api.get('/reservations/my', {params:{email}}),
+    getMyReservations : (email) => api.get('/reservations/my', {params:{email}}),
     // 예약취소
     cancel:(id) => api.patch(`/reservations/${id}/cancel`)
 }
