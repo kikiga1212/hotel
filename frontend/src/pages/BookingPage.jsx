@@ -128,6 +128,258 @@ function BookingPage(){
 
     const night = calcNights()
     const total = calcTotal()
+
+    // UI 렌더링
+
+    // return (
+    //     <div className={"container py-5"}>
+    //         <nav aria-label={"breadcrumb"} className={"mb-4"}>
+    //             <ol className={"breadcrumb"}>
+    //                 <li className={"breadcrumb-item"}>
+    //                     <Link to={"/rooms"}>객실 목록</Link>
+    //                 </li>
+    //                 {/* th:if th:unless => 값 && 태그  값 || 태그 */}
+    //                 {/* && 앞에 값이 맞으면 뒤에 태그를 출력 */}
+    //                 {/* || 앞에 값과 뒤에 태그를 함께 출력 */}
+    //                 {
+    //                     room && (
+    //                         <li className={"breadcrumb-item"}>
+    //                             <Link to={`/rooms/${roomId}`}>
+    //                                 {room.name}
+    //                             </Link>
+    //                         </li>
+    //                     )
+    //                 }
+    //                 <li className={"breadcrumb-item active"}>
+    //                     예약하기
+    //                 </li>
+    //             </ol>
+    //         </nav>
+    //         {/* 예약 폼*/}
+    //         <div className={"row g-5"}>
+    //             <div className={"col-lg-8"}>
+    //
+    //             </div>
+    //             <div className={"col-lg-4"}>
+    //                 <h2 className={"fw-bold mb-4"}>
+    //                     <i className={"bi bi-calendar-check me-2 text-primary"}></i> 예약 정보 입력
+    //                 </h2>
+    //                 <form onSubmit={handleSubmit} noValidate>
+    //                     {/* 고객 정보 */}
+    //                     <div className={"card border-0 shadow-sm mb-4"}>
+    //                         <div className={"card-header bg-white py-3"}>
+    //                             <h5 className={"mb-0 fw-semibold"}>
+    //                                 <i className={"bi bi-person me-2"}></i> 고객 정보
+    //                             </h5>
+    //                         </div>
+    //                         <div className={"card-body"}>
+    //                             <div className={"row g-3"}>
+    //                                 <div className={"col-md-6"}>
+    //                                     <label className={"form-label fw-semibold"}>이름 *</label>
+    //                                     <input type={"text"} name={"guestName"}
+    //                                     className={`form-control ${error.guestName? 'is-invalid' : ''}`}
+    //                                     value={form.guestName} onChange={handleChange} placeholder={"홍길동"}/>
+    //                                     {/* 오류메시지에 guestName이 존재하면 */}
+    //                                     {error.guestName && (
+    //                                         <div className={"invalid-feedback"}>
+    //                                             {error.guestName}
+    //                                         </div>
+    //                                     )}
+    //                                 </div>
+    //                                 <div className={"col-md-6"}>
+    //                                     <label className={"form-label fw-semibold"}>연락처 *</label>
+    //                                     <input type={"tel"} name={"guestPhone"}
+    //                                            className={`form-control ${error.guestPhone? 'is-invalid' : ''}`}
+    //                                            value={form.guestPhone} onChange={handleChange} placeholder={"010-1234-5678"}/>
+    //                                     {/* 오류메시지에 guestName이 존재하면 */}
+    //                                     {error.guestPhone && (
+    //                                         <div className={"invalid-feedback"}>
+    //                                             {error.guestPhone}
+    //                                         </div>
+    //                                     )}
+    //                                 </div>
+    //                                 <div className={"col-md-6"}>
+    //                                     <label className={"form-label fw-semibold"}>이메일 *</label>
+    //                                     <input type={"email"} name={"guestEmail"}
+    //                                            className={`form-control ${error.guestEmail? 'is-invalid' : ''}`}
+    //                                            value={form.guestEmail} onChange={handleChange} placeholder={"aaa@example.com"}/>
+    //                                     {/* 오류메시지에 guestName이 존재하면 */}
+    //                                     {error.guestEmail && (
+    //                                         <div className={"invalid-feedback"}>
+    //                                             {error.guestEmail}
+    //                                         </div>
+    //                                     )}
+    //                                 </div>
+    //                                 <div className={"col-md-6"}>
+    //                                     <label className={"form-label fw-semibold"}>최대인원 *</label>
+    //                                     <input type={"number"} name={"numberOfGuests"}
+    //                                            className={`form-control ${error.numberOfGuests? 'is-invalid' : ''}`}
+    //                                            value={form.numberOfGuests} onChange={handleChange} placeholder={"1"}/>
+    //                                     {/* 오류메시지에 guestName이 존재하면 */}
+    //                                     {error.numberOfGuests && (
+    //                                         <div className={"invalid-feedback"}>
+    //                                             {error.numberOfGuests}
+    //                                         </div>
+    //                                     )}
+    //                                 </div>
+    //                                 <div className={"col-md-6"}>
+    //                                     <label className={"form-label fw-semibold"}>체크인 *</label>
+    //                                     <input type={"date"} name={"checkInDate"}
+    //                                            className={`form-control ${error.checkInDate? 'is-invalid' : ''}`}
+    //                                            value={form.checkInDate} onChange={handleChange}/>
+    //                                     {/* 오류메시지에 guestName이 존재하면 */}
+    //                                     {error.checkInDate && (
+    //                                         <div className={"invalid-feedback"}>
+    //                                             {error.checkInDate}
+    //                                         </div>
+    //                                     )}
+    //                                 </div>
+    //                                 <div className={"col-md-6"}>
+    //                                     <label className={"form-label fw-semibold"}>체크아웃 *</label>
+    //                                     <input type={"date"} name={"checkOutDate"}
+    //                                            className={`form-control ${error.checkOutDate? 'is-invalid' : ''}`}
+    //                                            value={form.checkOutDate} onChange={handleChange}/>
+    //                                     {/* 오류메시지에 guestName이 존재하면 */}
+    //                                     {error.checkOutDate && (
+    //                                         <div className={"invalid-feedback"}>
+    //                                             {error.checkOutDate}
+    //                                         </div>
+    //                                     )}
+    //                                 </div>
+    //                                 <div className={"col-md-12"}>
+    //                                     <label className={"form-label fw-semibold"}>요청사항 *</label>
+    //                                     <textarea name={"specialRequests"} className={"form-control"}
+    //                                     onChange={handleChange} ></textarea>
+    //                                 </div>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                     {/* 예약 버튼(예약 작업이 있었으면 비활성) */}
+    //                     <button type={"submit"} className={"btn btn-primary btn-lg w-100"}
+    //                     disabled={submitting}>
+    //                         {submitting ? (
+    //                             <>
+    //                                 <span className={"spinner-border spinner-border-sm me-2"}></span> 예약 처리중
+    //                             </>
+    //                         ) : (
+    //                             <>
+    //                                 <i className={"bi bi-check-circle me-2"}></i> 예약 확정하기
+    //                             </>
+    //                         )
+    //                         }
+    //                     </button>
+    //                 </form>
+    //             </div>
+    //             <div className={"col-lg-4"}>
+    //                 {/* 가격, 숙박정보 */}
+    //             </div>
+    //         </div>
+    //
+    //     </div>
+    // )
+
+    return (
+        <div className="container py-5">
+            <h2 className="fw-bold mb-4">예약하기</h2>
+
+            <div className="row g-4">
+                {/* 왼쪽: 예약 정보 입력 폼 */}
+                <div className="col-lg-8">
+                    <div className="card border-0 shadow-sm p-4 rounded-3">
+                        <form onSubmit={handleSubmit}>
+                            <h5 className="mb-4 fw-bold">예약자 정보</h5>
+                            <div className="row g-3">
+                                <div className="col-md-6">
+                                    <label className="form-label">예약자 성함</label>
+                                    <input type="text" name="guestName" className={`form-control ${error.guestName ? 'is-invalid' : ''}`}
+                                           value={form.guestName} onChange={handleChange} placeholder="홍길동" />
+                                    <div className="invalid-feedback">{error.guestName}</div>
+                                </div>
+                                <div className="col-md-6">
+                                    <label className="form-label">이메일 주소</label>
+                                    <input type="email" name="guestEmail" className={`form-control ${error.guestEmail ? 'is-invalid' : ''}`}
+                                           value={form.guestEmail} onChange={handleChange} placeholder="example@gmail.com" />
+                                    <div className="invalid-feedback">{error.guestEmail}</div>
+                                </div>
+                                <div className="col-md-6">
+                                    <label className="form-label">연락처</label>
+                                    <input type="text" name="guestPhone" className={`form-control ${error.guestPhone ? 'is-invalid' : ''}`}
+                                           value={form.guestPhone} onChange={handleChange} placeholder="010-0000-0000" />
+                                    <div className="invalid-feedback">{error.guestPhone}</div>
+                                </div>
+                                <div className="col-md-6">
+                                    <label className="form-label">투숙 인원</label>
+                                    <input type="number" name="numberOfGuests" className={`form-control ${error.numberOfGuests ? 'is-invalid' : ''}`}
+                                           value={form.numberOfGuests} onChange={handleChange} min="1" max={room?.capacity} />
+                                    <div className="invalid-feedback">{error.numberOfGuests}</div>
+                                </div>
+
+                                <h5 className="mt-4 mb-2 fw-bold">일정 선택</h5>
+                                <div className="col-md-6">
+                                    <label className="form-label">체크인 날짜</label>
+                                    <input type="date" name="checkInDate" className={`form-control ${error.checkInDate ? 'is-invalid' : ''}`}
+                                           value={form.checkInDate} min={today} onChange={handleChange} />
+                                    <div className="invalid-feedback">{error.checkInDate}</div>
+                                </div>
+                                <div className="col-md-6">
+                                    <label className="form-label">체크아웃 날짜</label>
+                                    <input type="date" name="checkOutDate" className={`form-control ${error.checkOutDate ? 'is-invalid' : ''}`}
+                                           value={form.checkOutDate} min={form.checkInDate || today} onChange={handleChange} />
+                                    <div className="invalid-feedback">{error.checkOutDate}</div>
+                                </div>
+
+                                <div className="col-12 mt-4">
+                                    <label className="form-label">기타 요청사항 (선택)</label>
+                                    <textarea name="specialRequests" className="form-control" rows="3"
+                                              value={form.specialRequests} onChange={handleChange} placeholder="미니바 추가, 엑스트라 베드 등..."></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" className="btn btn-primary btn-lg w-100 mt-4" disabled={submitting}>
+                                {submitting ? '예약 처리 중...' : '예약 확정하기'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {/* 오른쪽: 예약 요약 및 요금 정보 */}
+                <div className="col-lg-4">
+                    <div className="card border-0 shadow-sm p-4 rounded-3 bg-light sticky-top" style={{ top: '2rem' }}>
+                        <h5 className="fw-bold mb-3">예약 요약</h5>
+                        <div className="d-flex mb-3">
+                            <img src={room?.imageUrl || 'https://via.placeholder.com/100'} alt={room?.name}
+                                 className="rounded" style={{ width: '80px', height: '60px', objectFit: 'cover' }} />
+                            <div className="ms-3">
+                                <h6 className="fw-bold mb-0">{room?.name}</h6>
+                                <small className="text-muted">최대 {room?.capacity}인 투숙 가능</small>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div className="d-flex justify-content-between mb-2">
+                            <span>1박 요금</span>
+                            <span>{room?.pricePerNight.toLocaleString()} 원</span>
+                        </div>
+                        <div className="d-flex justify-content-between mb-2">
+                            <span>총 숙박일</span>
+                            <span>{night} 박</span>
+                        </div>
+
+                        <hr />
+
+                        <div className="d-flex justify-content-between align-items-center mb-0">
+                            <span className="fw-bold fs-5">총 결제 금액</span>
+                            <span className="fw-bold fs-4 text-primary">{total.toLocaleString()} 원</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+
+
 }
 
 export default BookingPage
